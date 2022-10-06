@@ -31,9 +31,9 @@ Scanner sc = new Scanner(System.in);
         System.out.println(user);
         return user;
     } else{
-        System.out.println("Invalid login.");
-        return null;
-        }
+                System.out.println("Invalid login.");
+                return null;
+            }
     }
 
     public Employee register(){
@@ -45,9 +45,9 @@ Scanner sc = new Scanner(System.in);
         String username = sc.nextLine();
         System.out.println("Please enter your password");
         String password = sc.nextLine();
-      System.out.println("Are you a manager?");
-      System.out.println("Type true for yes and false for no");
-      String admin = sc.nextLine();
+        System.out.println("Are you a manager?");
+        System.out.println("Type true for yes and false for no");
+        String admin = sc.nextLine();
 
 
         Employee employee = ed.createEmployee(first,last,username,password, Boolean.parseBoolean(admin));

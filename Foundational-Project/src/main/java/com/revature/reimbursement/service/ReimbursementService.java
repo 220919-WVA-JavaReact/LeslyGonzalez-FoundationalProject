@@ -5,6 +5,7 @@ import com.revature.reimbursement.dao.ReimbursementDAOImpl;
 import com.revature.reimbursement.models.Employee;
 import com.revature.reimbursement.models.Reimbursement;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ReimbursementService {
@@ -27,6 +28,27 @@ public class ReimbursementService {
             System.out.println("You created a reimbursement ticket!");
         }else{
             System.out.println("Something went wrong can not create ticket!");
+        }
+    }
+
+    public void getAllReimbursement(){
+        System.out.println("List of created Tickets: ");
+
+        List<Reimbursement> reimbursementList = rd.getAllReimbursement();
+
+        for(Reimbursement ticket: reimbursementList){
+            System.out.println(ticket);
+        }
+    }
+
+    public void getReimbursementByEmployee(Employee employee){
+        System.out.println("tickets pending");
+
+        List<Reimbursement> reimbursements = rd.getReimbursementByEmployee(employee.getEmployeeId());
+
+
+        for(Reimbursement ticket: reimbursements){
+            System.out.println(ticket);
         }
     }
 

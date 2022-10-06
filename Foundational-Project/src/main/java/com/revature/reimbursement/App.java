@@ -19,6 +19,7 @@ public class App {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
 
+
         Employee loggedInEmployee = null;
 
         if(input.equals("1")){
@@ -28,26 +29,45 @@ public class App {
         }else if(input.equals("2")){
 
             loggedInEmployee = es.register();
-        } else if (input.equals("3")) {
+        } /*else if (input.equals("3")) {
             es.getAllEmployees();
-        } else{
+        }*/ else{
             System.out.println("invalid input");
         }
 
-        if (loggedInEmployee != null){
+        while(loggedInEmployee != null) {
+            String ticketChoice = null;
+            if (loggedInEmployee.getAdmin()) {
 
-            //if manager then give a different menu HEREEEEEE!
-            
-            System.out.println("Press 1 to create a Reimbursement ticket, 2 update ticket, 3view all tickets ");
+                System.out.println("Press 1 to update a ticket, 2 view all tickets ");
 
-            String ticketChoice = sc.nextLine();
+                ticketChoice = sc.nextLine();
 
-            if(ticketChoice.equals("1")) {
-                rs.createReimbursement(loggedInEmployee);
-            }else {
-                System.out.println("invalid input");
+                if (ticketChoice.equals("1")) {
+                    System.out.println("updated ticket");
+                } else if (ticketChoice.equals("2")) {
+                    rs.getAllReimbursement();
+                } else {
+                    System.out.println("invalid input");
+                }
+            } else if (!loggedInEmployee.getAdmin()) {
+
+                System.out.println("Press 1 to create a ticket, 2 view all your tickets ");
+                ticketChoice = sc.nextLine();
+
+                if (ticketChoice.equals("1")) {
+                    rs.createReimbursement(loggedInEmployee);
+                } else if (ticketChoice.equals("2")){
+                    rs.getReimbursementByEmployee(loggedInEmployee);
+                } else {
+                    System.out.println("invalid input");
+                }
+                break;
             }
         }
+
+
     }
 }
+
 

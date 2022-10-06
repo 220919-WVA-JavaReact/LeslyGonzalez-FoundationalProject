@@ -36,7 +36,6 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
                 int id = rs.getInt("employee_id");
                 String first = rs.getString("first");
                 String last = rs.getString("last");
-                String receivedUser = rs.getString("username");
                 String password = rs.getString("password");
                 boolean admin = rs.getBoolean("admin");
 

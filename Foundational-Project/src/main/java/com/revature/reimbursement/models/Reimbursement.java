@@ -8,10 +8,10 @@ public class Reimbursement {
     String description;
     boolean approvalStatus;
     boolean completed;
-    int date;
+    String date;
     int employeeId;
 
-    public Reimbursement(int reimbursementId, double amount, String description, boolean approvalStatus, boolean completed, int date, int employeeId) {
+    public Reimbursement(int reimbursementId, double amount, String description, boolean approvalStatus, boolean completed, String date, int employeeId) {
         this.reimbursementId = reimbursementId;
         this.amount = amount;
         this.description = description;
@@ -20,6 +20,7 @@ public class Reimbursement {
         this.date = date;
         this.employeeId = employeeId;
     }
+
 
     public Reimbursement(double amount, String description, int employeeId) {
         this.amount = amount;
@@ -77,19 +78,19 @@ public class Reimbursement {
         this.completed = completed;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public int getEmployeeIdId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeIdId(int employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -111,11 +112,13 @@ public class Reimbursement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reimbursement that = (Reimbursement) o;
-        return reimbursementId == that.reimbursementId && Double.compare(that.amount, amount) == 0 && approvalStatus == that.approvalStatus && completed == that.completed && date == that.date && description.equals(that.description);
+        return reimbursementId == that.reimbursementId && Double.compare(that.amount, amount) == 0 && approvalStatus == that.approvalStatus && completed == that.completed && employeeId == that.employeeId && description.equals(that.description) && date.equals(that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reimbursementId, amount, description, approvalStatus, completed, date);
+        return Objects.hash(reimbursementId, amount, description, approvalStatus, completed, date, employeeId);
     }
 }
+
+

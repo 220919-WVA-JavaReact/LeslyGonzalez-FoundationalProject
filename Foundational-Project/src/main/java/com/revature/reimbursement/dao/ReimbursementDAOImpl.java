@@ -4,9 +4,8 @@ import com.revature.reimbursement.models.Employee;
 import com.revature.reimbursement.models.Reimbursement;
 import com.revature.reimbursement.util.ConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReimbursementDAOImpl implements ReimbursementDAO {
@@ -44,14 +43,75 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
     @Override
     public List<Reimbursement> getAllReimbursement() {
-        System.out.println("get all the reimbursement method");
-        return null;
+
+        Connection conn = ConnectionUtil.getConnection();
+
+        List<Reimbursement> reimbursements = new ArrayList<>();
+
+        try{
+            Statement stat = conn.createStatement();
+
+            String sql = "SELECT * FROM reimbursement WHERE completed = false";
+
+            ResultSet rs = stat.executeQuery(sql);
+
+            while(rs.next()){
+
+                int id = rs.getInt("reimbursement_id");
+                double amount = rs.getDouble("amount");
+                String description = rs.getString("description");
+                boolean approval_status = rs.getBoolean("approval_status");
+                boolean completed = rs.getBoolean("completed");
+                String date = rs.getString("created_at");
+                int employee_id = rs.getInt("employee_id");
+
+                Reimbursement ticket = new Reimbursement(id, amount, description, approval_status, completed, date, employee_id);
+
+                reimbursements.add(ticket);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            return reimbursements;
     }
 
     @Override
     public List<Reimbursement> getReimbursementByEmployee(int id) {
         System.out.println("Get reimbursement by employee");
-        return null;
+
+
+        List<Reimbursement> reimbursements = new ArrayList<>();
+
+        try (Connection conn = ConnectionUtil.getConnection();){
+
+            String sql = "SELECT * FROM reimbursement WHERE employee_id = ?";
+
+            PreparedStatement stat = conn.prepareStatement(sql);
+
+            stat.setInt(1, id);
+
+            ResultSet rs = stat.executeQuery();
+
+            if((rs = stat.executeQuery()) != null) {
+
+                while (rs.next()) {
+
+                    int ticketId = rs.getInt("reimbursement_id");
+                    double amount = rs.getDouble("amount");
+                    String description = rs.getString("description");
+                    boolean approved = rs.getBoolean("approval_status");
+                    boolean completed = rs.getBoolean("completed");
+                    String date = rs.getString("created_at");
+
+                    Reimbursement ticket = new Reimbursement(ticketId, amount, description, approved, completed, date, id);
+
+                    reimbursements.add(ticket);
+                }
+            }
+            } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return reimbursements;
     }
 
     @Override
