@@ -37,20 +37,59 @@ public class ReimbursementService {
         List<Reimbursement> reimbursementList = rd.getAllReimbursement();
 
         for(Reimbursement ticket: reimbursementList){
-            System.out.println(ticket);
+            System.out.println("+----------------------------------------------------------------------------------------------------------------------------+");
+            System.out.println(" Ticket ID: " + ticket.getReimbursementId() + " | Approval Status: PENDING!" + " | Price: $" + ticket.getAmount() + " | Description: " +  ticket.getDescription() + " | Employee ID: " + ticket.getEmployeeId());
+            System.out.println("+----------------------------------------------------------------------------------------------------------------------------+");
+        }
+    }
+
+
+    public void getAllPending(){
+        System.out.println("List of created Tickets: ");
+
+        List<Reimbursement> pendingList = rd.getAllPending();
+
+        for(Reimbursement ticket: pendingList){
+            System.out.println("+----------------------------------------------------------------------------------------------------------------------------+");
+            System.out.println(" Ticket ID: " + ticket.getReimbursementId() + " | Approval Status: PENDING!" + " | Price: $" + ticket.getAmount() + " | Description: " +  ticket.getDescription() + " | Employee ID: " + ticket.getEmployeeId());
+            System.out.println("+----------------------------------------------------------------------------------------------------------------------------+");
         }
     }
 
     public void getReimbursementByEmployee(Employee employee){
-        System.out.println("tickets pending");
 
         List<Reimbursement> reimbursements = rd.getReimbursementByEmployee(employee.getEmployeeId());
 
 
         for(Reimbursement ticket: reimbursements){
-            System.out.println(ticket);
+            System.out.println("+---------------------------------------------------------------------------------------------------------------------------------+");
+            System.out.println(" Ticket ID: " + ticket.getReimbursementId() + " | Price: $" + ticket.getAmount() + " | Description: " + ticket.getDescription());
+            System.out.println("+---------------------------------------------------------------------------------------------------------------------------------+");
         }
     }
+
+    public void updateReimbursement(){
+
+        Reimbursement reimbursement;
+
+        System.out.println("Enter Reimbursement Number you'll like to approve");
+        int reimbursementId = sc.nextInt();
+
+        reimbursement = rd.updateReimbursement(reimbursementId);
+
+
+        if( reimbursement.equals(true)){
+            System.out.println("You updated a reimbursement ticket!");
+        }else{
+            System.out.println("Something went wrong can not update ticket!");
+        }
+    }
+}
+
+
+
+
+
 
     //need to refactor and store in user information somewhere
 
@@ -64,4 +103,4 @@ public class ReimbursementService {
 //        rd.updateReimbursement(makeTicket);
 //    }
 
-}
+

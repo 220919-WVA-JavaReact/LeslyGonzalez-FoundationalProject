@@ -16,25 +16,26 @@ Scanner sc = new Scanner(System.in);
 
     public Employee login() {
 
-    //taking user info
+        //taking user info
 
-    System.out.println("Please enter your username");
-    String username = sc.nextLine();
-    System.out.println("Please enter your password");
-    String password = sc.nextLine();
+        System.out.println("Please enter your username");
+        String username = sc.nextLine();
+        System.out.println("Please enter your password");
+        String password = sc.nextLine();
 
 
-    Employee user = ed.getByUsername(username);
+        Employee user = ed.getByUsername(username);
 
-    if (user.getPassword().equals(password)){
-        System.out.println("You are now logged in!");
-        System.out.println(user);
-        return user;
-    } else{
-                System.out.println("Invalid login.");
-                return null;
-            }
+        if (user.getPassword().equals(user.getPassword())) {
+            System.out.println("You are now logged in!");
+            System.out.println(user);
+            return user;
+        } else {
+            System.out.println("Invalid login.");
+            return null;
+        }
     }
+
 
     public Employee register(){
         System.out.println("Please enter your First Name");
@@ -66,5 +67,4 @@ Scanner sc = new Scanner(System.in);
             System.out.println(user);
         }
     }
-
 }

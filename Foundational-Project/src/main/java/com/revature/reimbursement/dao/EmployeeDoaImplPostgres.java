@@ -43,6 +43,8 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
             }
 
         } catch (SQLException e){
+            System.out.println("Wrong log in information!");
+            System.out.println("+-----------------------------------------------------------------------------------+");
             e.printStackTrace();
         }
         return user;

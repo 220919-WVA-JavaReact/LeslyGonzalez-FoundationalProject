@@ -39,13 +39,16 @@ public class App {
             String ticketChoice = null;
             if (loggedInEmployee.getAdmin()) {
 
-                System.out.println("Press 1 to update a ticket, 2 view all tickets ");
+                System.out.println("Press 1 to update a ticket, 2 view all tickets pending, 3 view all tickets ");
 
                 ticketChoice = sc.nextLine();
 
                 if (ticketChoice.equals("1")) {
                     System.out.println("updated ticket");
-                } else if (ticketChoice.equals("2")) {
+                    rs.updateReimbursement();
+                } else if(ticketChoice.equals("2")){
+                    rs.getAllPending();
+                }else if (ticketChoice.equals("3")) {
                     rs.getAllReimbursement();
                 } else {
                     System.out.println("invalid input");
@@ -65,8 +68,6 @@ public class App {
                 break;
             }
         }
-
-
     }
 }
 
