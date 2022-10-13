@@ -26,9 +26,9 @@ Scanner sc = new Scanner(System.in);
 
         Employee user = ed.getByUsername(username);
 
-        if (user.getPassword().equals(user.getPassword())) {
+        if (user.getPassword().equals(password)) {
             System.out.println("You are now logged in!");
-            System.out.println(user);
+            System.out.println("Employee ID: " + user.getEmployeeId() + " | First Name: " + user.getFirst() + " | Last Name: " + user.getLast() + " | Username: " + user.getUsername() + " | Admin: " + user.getAdmin());
             return user;
         } else {
             System.out.println("Invalid login.");
@@ -40,18 +40,37 @@ Scanner sc = new Scanner(System.in);
     public Employee register(){
         System.out.println("Please enter your First Name");
         String first = sc.nextLine();
+
+        while(first.equals("")){
+            System.out.println("First name cant be empty. Please enter your First Name");
+            first = sc.nextLine();
+        }
+
         System.out.println("Please enter your Last Name");
         String last = sc.nextLine();
+
+        while(last.equals("")){
+            System.out.println("Last name cant be empty. Please enter your Last Name");
+            last = sc.nextLine();
+        }
+
         System.out.println("Please enter your username");
         String username = sc.nextLine();
+
+        while(username.equals("")){
+            System.out.println("Username cant be empty. Please enter a username");
+            username = sc.nextLine();
+        }
+
         System.out.println("Please enter your password");
         String password = sc.nextLine();
-        System.out.println("Are you a manager?");
-        System.out.println("Type true for yes and false for no");
-        String admin = sc.nextLine();
 
+        while(password.equals("")){
+            System.out.println("Password is needed. Please enter your password");
+            password = sc.nextLine();
+        }
 
-        Employee employee = ed.createEmployee(first,last,username,password, Boolean.parseBoolean(admin));
+        Employee employee = ed.createEmployee(first,last,username,password);
 
 
         return employee;

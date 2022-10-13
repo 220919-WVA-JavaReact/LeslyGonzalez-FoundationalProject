@@ -51,7 +51,7 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
     }
 
     @Override
-    public Employee createEmployee(String first, String last, String username, String password, boolean admin) {
+    public Employee createEmployee(String first, String last, String username, String password) {
         Employee employee = new Employee();
 
         try(Connection conn = ConnectionUtil.getConnection()){
@@ -64,7 +64,7 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
             stat.setString(2, last);
             stat.setString(3, username);
             stat.setString(4, password);
-            stat.setBoolean(5, admin);
+            stat.setBoolean(5, false);
 
             ResultSet rs;
 
@@ -84,7 +84,7 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Couldn't register to database");
+            System.out.println("Username in use. Enter another username");
         }
         return employee;
     }

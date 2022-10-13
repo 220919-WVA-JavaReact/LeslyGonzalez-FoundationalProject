@@ -35,17 +35,45 @@ public class ConnectionUtil {
             return null;
         }
 
+//        String url = System.getenv("url");
+//        String username = System.getenv("username");
+//        String password = System.getenv("password");
 
-        String url = System.getenv("url");
-        String username = System.getenv("username");
-        String password = System.getenv("password");
-        try {
+
+        String url = "";
+        String username = "";
+        String password = "";
+
+        Properties prop = new Properties();
+
+
+
+        try{
+            prop.load(new FileReader("src/main/resources/application.properties"));
+
+            url = prop.getProperty("url");
+            username = prop.getProperty("username");
+            password = prop.getProperty("password");
+
+
             conn = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
+            System.out.println("Established connection to database!");
+
+        } catch (IOException e){
+            System.out.println("Property file not found!");
+            throw new RuntimeException(e);
+        }catch (SQLException e){
             System.out.println("Could not establish connection");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
+//        try {
+//            Class.forName("org.postgresql.Driver");
+//            conn = DriverManager.getConnection(url, username, password);
+//        } catch (SQLException | ClassNotFoundException e) {
+//            System.out.println("Could not establish connection");
+//            e.printStackTrace();
+//        }
 
 
         return conn;

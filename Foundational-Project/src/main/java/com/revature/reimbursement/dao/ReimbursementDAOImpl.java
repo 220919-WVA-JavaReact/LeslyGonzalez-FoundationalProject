@@ -112,8 +112,6 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
     @Override
     public List<Reimbursement> getReimbursementByEmployee(int id) {
-        System.out.println("Get reimbursement by employee");
-
 
         List<Reimbursement> reimbursements = new ArrayList<>();
 

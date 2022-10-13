@@ -65,7 +65,6 @@ public class App {
                 } else {
                     System.out.println("invalid input");
                 }
-                break;
             }
         }
     }
