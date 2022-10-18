@@ -182,4 +182,44 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
         }
         return ticket;
     }
+
+
+    @Override
+    public Reimbursement reimbursementApproval(int id) {
+        System.out.println("update method");
+
+        Reimbursement ticket = new Reimbursement();
+
+        try (Connection conn = ConnectionUtil.getConnection()) {
+
+            String sql = "UPDATE reimbursement SET approval_status = true WHERE reimbursement_id = ? RETURNING *";
+
+            PreparedStatement stat = conn.prepareStatement(sql);
+
+            stat.setInt(1, id);
+
+            ResultSet rs;
+
+            if ((rs = stat.executeQuery()) != null) {
+
+                rs.next();
+
+                double amount = rs.getDouble("amount");
+                String description = rs.getString("description");
+                boolean status = rs.getBoolean("approval_status");
+                boolean complete = rs.getBoolean("completed");
+                String date = rs.getString("created_at");
+                int employee = rs.getInt("employee_id");
+
+                ticket = new Reimbursement(id, amount, description, status, complete, date, employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return ticket;
+    }
+
+
+
 }
