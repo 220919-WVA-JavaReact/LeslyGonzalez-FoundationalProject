@@ -36,6 +36,14 @@ Scanner sc = new Scanner(System.in);
         }
     }
 
+    public Employee login(String username, String password) throws NullPointerException{
+         Employee user = ed.getByUsername(username);
+        if (password.equals(user.getPassword())){
+            return user;
+        }
+        return null;
+    }
+
 
     public Employee register(){
         System.out.println("Please enter your First Name");
@@ -73,6 +81,11 @@ Scanner sc = new Scanner(System.in);
         Employee employee = ed.createEmployee(first,last,username,password);
 
 
+        return employee;
+    }
+
+    public Employee register(String first, String last, String username, String password){
+        Employee employee = ed.createEmployee(first, last, username, password);
         return employee;
     }
 

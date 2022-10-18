@@ -11,8 +11,6 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
 
     @Override
     public Employee getByUsername(String username) {
-        //
-
         Employee user = new Employee();
         //user block to close connection
         //close resources after using them
@@ -31,21 +29,22 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
 
             if((rs = stat.executeQuery()) != null){
 
-                rs.next();
+                if(rs.next()) {
+                    int id = rs.getInt("employee_id");
+                    String first = rs.getString("first");
+                    String last = rs.getString("last");
+                    String password = rs.getString("password");
+                    boolean admin = rs.getBoolean("admin");
 
-                int id = rs.getInt("employee_id");
-                String first = rs.getString("first");
-                String last = rs.getString("last");
-                String password = rs.getString("password");
-                boolean admin = rs.getBoolean("admin");
-
-                user = new Employee(id, first, last, username,password, admin);
+                    user = new Employee(id, first, last, username, password, admin);
+                }
             }
 
         } catch (SQLException e){
             System.out.println("Wrong log in information!");
             System.out.println("+-----------------------------------------------------------------------------------+");
-            e.printStackTrace();
+//            e.printStackTrace();
+            return null;
         }
         return user;
     }

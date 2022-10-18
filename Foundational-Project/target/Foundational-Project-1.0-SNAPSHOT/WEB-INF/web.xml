@@ -6,14 +6,10 @@
 
     <display-name>FoundationalProject</display-name>
 
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.revature.reimbursement.LoginServlet</servlet-class>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
+
+    <listener>
+        <listener-class>com.revature.reimbursement.util.ContextLoaderListener</listener-class>
+    </listener>
 
 </web-app>

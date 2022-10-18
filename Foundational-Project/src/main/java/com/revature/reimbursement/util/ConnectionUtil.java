@@ -67,16 +67,20 @@ public class ConnectionUtil {
             throw new RuntimeException(e);
         }
 
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            conn = DriverManager.getConnection(url, username, password);
-//        } catch (SQLException | ClassNotFoundException e) {
-//            System.out.println("Could not establish connection");
-//            e.printStackTrace();
-//        }
-
-
         return conn;
     }
+
+
+    //Static block for Driver
+
+    static{
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Failed to load PostgreSQL driver");
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

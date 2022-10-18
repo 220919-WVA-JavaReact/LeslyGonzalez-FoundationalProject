@@ -19,7 +19,10 @@ public class Employee {
         this.admin = admin;
     }
 
-
+    public Employee(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public Employee() {
 
