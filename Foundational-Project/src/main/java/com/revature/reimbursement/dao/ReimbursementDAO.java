@@ -24,7 +24,7 @@ public interface ReimbursementDAO {
 
     //int updateReimbursement(Reimbursement reimbursement);
 
-    Reimbursement updateReimbursement(int id);
+    Reimbursement updateReimbursementDeny(int id);
 
     Reimbursement reimbursementApproval(int id);
 }

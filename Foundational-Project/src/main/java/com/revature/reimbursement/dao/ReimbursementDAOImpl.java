@@ -165,16 +165,17 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
     }
 
     @Override
-    public Reimbursement updateReimbursement(int id) {
+    public Reimbursement updateReimbursementDeny(int id) {
         System.out.println("update method");
 
         Reimbursement ticket = new Reimbursement();
 
         try (Connection conn = ConnectionUtil.getConnection()) {
 
-            String sql = "UPDATE reimbursement SET completed = true WHERE reimbursement_id = ? RETURNING *";
+            String sql = "UPDATE reimbursement SET completed = TRUE WHERE reimbursement_id = ? RETURNING *";
 
             PreparedStatement stat = conn.prepareStatement(sql);
+
 
             stat.setInt(1, id);
 
@@ -183,7 +184,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
             if ((rs = stat.executeQuery()) != null) {
 
                 rs.next();
-
+                int ticketId = rs.getInt("reimbursement_id");
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
                 String type = rs.getString("reimbursement_type");
@@ -192,7 +193,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
                 String date = rs.getString("created_at");
                 int employee = rs.getInt("employee_id");
 
-                ticket = new Reimbursement(id, amount, description, type, status, complete, date, employee);
+                ticket = new Reimbursement(ticketId, amount, description, type, status, complete, date, employee);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -210,9 +211,10 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
         try (Connection conn = ConnectionUtil.getConnection()) {
 
-            String sql = "UPDATE reimbursement SET approval_status = true WHERE reimbursement_id = ? RETURNING *";
+            String sql = "UPDATE reimbursement SET approval_status = true, completed = true WHERE reimbursement_id = ? RETURNING *";
 
             PreparedStatement stat = conn.prepareStatement(sql);
+
 
             stat.setInt(1, id);
 
@@ -221,21 +223,22 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
             if ((rs = stat.executeQuery()) != null) {
 
                 rs.next();
-
+                int ticketId = rs.getInt("reimbursement_id");
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
                 String type = rs.getString("reimbursement_type");
-                boolean status = rs.getBoolean("approval_status");
-                boolean complete = rs.getBoolean("completed");
+                boolean status= rs.getBoolean("approval_status");
+                boolean completed = rs.getBoolean("completed");
                 String date = rs.getString("created_at");
                 int employee = rs.getInt("employee_id");
 
-                ticket = new Reimbursement(id, amount, description,  type,status, complete, date, employee);
+                ticket = new Reimbursement(ticketId, amount, description, type, status, completed, date, employee);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
+        System.out.println(ticket);
         return ticket;
     }
 

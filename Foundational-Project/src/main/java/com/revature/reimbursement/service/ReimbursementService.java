@@ -76,23 +76,29 @@ public class ReimbursementService {
         return (Reimbursement) rd.getReimbursementByEmployee(employee_id);
     }
 
-    public void updateReimbursement(){
-
-        Reimbursement reimbursement;
-
-        System.out.println("Enter Reimbursement Number you'll like to approve");
-        int reimbursementId = sc.nextInt();
-
-        reimbursement = rd.updateReimbursement(reimbursementId);
 
 
-        if( reimbursement.equals(true)){
-            System.out.println("You updated a reimbursement ticket!");
-        }else{
-            System.out.println("Something went wrong can not update ticket!");
-        }
+    public Reimbursement updateReimbursementDeny(int employee_id){
+
+        return rd.updateReimbursementDeny(employee_id);
+
+//        System.out.println("Enter Reimbursement Number you'll like to approve");
+//        int reimbursementId = sc.nextInt();
+
+
+//        if( reimbursement.equals(true)){
+//            System.out.println("You updated a reimbursement ticket!");
+//        }else{
+//            System.out.println("Something went wrong can not update ticket!");
+//        }
+    }
+
+
+    public Reimbursement reimbursementApproval(int id){
+        return rd.reimbursementApproval(id);
     }
 }
+
 
 
 
