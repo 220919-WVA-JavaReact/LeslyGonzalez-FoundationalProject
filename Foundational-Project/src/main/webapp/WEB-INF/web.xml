@@ -7,7 +7,6 @@
     <display-name>FoundationalProject</display-name>
 
 
-
     <listener>
         <listener-class>com.revature.reimbursement.util.ContextLoaderListener</listener-class>
     </listener>

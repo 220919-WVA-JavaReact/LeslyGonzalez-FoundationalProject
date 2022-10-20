@@ -11,7 +11,7 @@ import java.util.List;
 public class ReimbursementDAOImpl implements ReimbursementDAO {
 
     @Override
-    public boolean createReimbursement(double amount, String description, Employee employee) {
+    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee) {
         System.out.println("Created ticked Method");
 
 
@@ -20,24 +20,27 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
         try (Connection conn = ConnectionUtil.getConnection()) {
 
 
-            String sql = "INSERT INTO reimbursement (amount, description, employee_id) VALUES (?,?,?)";
+            String sql = "INSERT INTO reimbursement (amount, description, reimbursement_type, employee_id) VALUES (?,?,?)";
 
             PreparedStatement stat = conn.prepareStatement(sql);
 
             stat.setDouble(1, amount);
             stat.setString(2, description);
-            stat.setInt(3, employee.getEmployeeId());
-
+            stat.setString(3, reimbursementType );
+            stat.setInt(4, employee.getEmployeeId());
+// ResultSet rs;
+//
+//            if((rs = stat.executeQuery()) != null){
             int rowsUpdated = stat.executeUpdate();
 
             if (rowsUpdated == 1) {
-                return true;
+                return reimbursement;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Unable to add course");
         }
-        return false;
+        return null;
     }
 
 
@@ -60,12 +63,13 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
                 int id = rs.getInt("reimbursement_id");
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
+                String type = rs.getString("reimbursement_type");
                 boolean approval_status = rs.getBoolean("approval_status");
                 boolean completed = rs.getBoolean("completed");
                 String date = rs.getString("created_at");
                 int employee_id = rs.getInt("employee_id");
 
-                Reimbursement ticket = new Reimbursement(id, amount, description, approval_status, completed, date, employee_id);
+                Reimbursement ticket = new Reimbursement(id, amount, description, type , approval_status, completed, date, employee_id);
 
                 reimbursements.add(ticket);
             }
@@ -95,12 +99,13 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
                 int id = rs.getInt("reimbursement_id");
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
+                String type = rs.getString("reimbursement_type");
                 boolean approval_status = rs.getBoolean("approval_status");
                 boolean completed = rs.getBoolean("completed");
                 String date = rs.getString("created_at");
                 int employee_id = rs.getInt("employee_id");
 
-                Reimbursement ticket = new Reimbursement(id, amount, description, approval_status, completed, date, employee_id);
+                Reimbursement ticket = new Reimbursement(id, amount, description, type, approval_status, completed, date, employee_id);
 
                 reimbursements.add(ticket);
             }
@@ -132,11 +137,12 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
                     int ticketId = rs.getInt("reimbursement_id");
                     double amount = rs.getDouble("amount");
                     String description = rs.getString("description");
+                    String type = rs.getString("reimbursement_type");
                     boolean approved = rs.getBoolean("approval_status");
                     boolean completed = rs.getBoolean("completed");
                     String date = rs.getString("created_at");
 
-                    Reimbursement ticket = new Reimbursement(ticketId, amount, description, approved, completed, date, id);
+                    Reimbursement ticket = new Reimbursement(ticketId, amount, description, type, approved, completed, date, id);
 
                     reimbursements.add(ticket);
                 }
@@ -169,12 +175,13 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
+                String type = rs.getString("reimbursement_type");
                 boolean status = rs.getBoolean("approval_status");
                 boolean complete = rs.getBoolean("completed");
                 String date = rs.getString("created_at");
                 int employee = rs.getInt("employee_id");
 
-                ticket = new Reimbursement(id, amount, description, status, complete, date, employee);
+                ticket = new Reimbursement(id, amount, description, type, status, complete, date, employee);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -206,12 +213,13 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
                 double amount = rs.getDouble("amount");
                 String description = rs.getString("description");
+                String type = rs.getString("reimbursement_type");
                 boolean status = rs.getBoolean("approval_status");
                 boolean complete = rs.getBoolean("completed");
                 String date = rs.getString("created_at");
                 int employee = rs.getInt("employee_id");
 
-                ticket = new Reimbursement(id, amount, description, status, complete, date, employee);
+                ticket = new Reimbursement(id, amount, description,  type,status, complete, date, employee);
             }
         } catch (SQLException e) {
             e.printStackTrace();

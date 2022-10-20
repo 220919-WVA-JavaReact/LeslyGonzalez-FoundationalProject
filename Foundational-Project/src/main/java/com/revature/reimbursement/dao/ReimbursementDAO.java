@@ -3,7 +3,6 @@ package com.revature.reimbursement.dao;
 import com.revature.reimbursement.models.Employee;
 import com.revature.reimbursement.models.Reimbursement;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ReimbursementDAO {
@@ -11,7 +10,7 @@ public interface ReimbursementDAO {
     //Create
 
 
-    boolean createReimbursement(double amount, String description, Employee employee);
+    Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee);
 
     //Read
     List<Reimbursement> getAllReimbursement();

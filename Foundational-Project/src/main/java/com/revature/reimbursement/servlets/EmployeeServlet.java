@@ -60,6 +60,7 @@ public class EmployeeServlet extends HttpServlet {
 
 
         if(!payload.equals("null")) {
+            resp.setContentType("application/json");
             resp.getWriter().write(payload);
         } else if(providedFirst.equals("null") && providedFirst.equals("")){
             resp.getWriter().write("First name can't be empty. Please enter a first name.");

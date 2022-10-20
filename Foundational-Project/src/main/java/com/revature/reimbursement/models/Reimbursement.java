@@ -6,18 +6,28 @@ public class Reimbursement {
     int reimbursementId;
     double amount;
     String description;
+
+    String reimbursementType;
     boolean approvalStatus;
     boolean completed;
     String date;
     int employeeId;
 
-    public Reimbursement(int reimbursementId, double amount, String description, boolean approvalStatus, boolean completed, String date, int employeeId) {
+    public Reimbursement(int reimbursementId, double amount, String description, String reimbursementType , boolean approvalStatus, boolean completed, String date, int employeeId) {
         this.reimbursementId = reimbursementId;
         this.amount = amount;
         this.description = description;
+        this.reimbursementType = reimbursementType;
         this.approvalStatus = approvalStatus;
         this.completed = completed;
         this.date = date;
+        this.employeeId = employeeId;
+    }
+
+    public Reimbursement(double amount, String description, String reimbursementType, int employeeId) {
+        this.amount = amount;
+        this.description = description;
+        this.reimbursementType = reimbursementType;
         this.employeeId = employeeId;
     }
 
@@ -30,7 +40,6 @@ public class Reimbursement {
     }
 
     public Reimbursement(){
-
     }
 
     public Reimbursement(String reimbursementId, int employeeId) {
@@ -81,6 +90,14 @@ public class Reimbursement {
 
     public String getDate() {
         return date;
+    }
+
+    public String getReimbursementType() {
+        return reimbursementType;
+    }
+
+    public void setReimbursementType(String reimbursementType) {
+        this.reimbursementType = reimbursementType;
     }
 
     public void setDate(String date) {

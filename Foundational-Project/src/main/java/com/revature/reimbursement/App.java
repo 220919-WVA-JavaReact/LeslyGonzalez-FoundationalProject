@@ -35,38 +35,38 @@ public class App {
             System.out.println("invalid input");
         }
 
-        while(loggedInEmployee != null) {
-            String ticketChoice = null;
-            if (loggedInEmployee.getAdmin()) {
+//        while(loggedInEmployee != null) {
+//            String ticketChoice = null;
+//            if (loggedInEmployee.getAdmin()) {
+//
+//                System.out.println("Press 1 to update a ticket, 2 view all tickets pending, 3 view all tickets ");
+//
+//                ticketChoice = sc.nextLine();
+//
+//                if (ticketChoice.equals("1")) {
+//                    System.out.println("updated ticket");
+//                    rs.updateReimbursement();
+//                } else if(ticketChoice.equals("2")){
+//                    rs.getAllPending();
+//                }else if (ticketChoice.equals("3")) {
+//                    rs.getAllReimbursement();
+//                } else {
+//                    System.out.println("invalid input");
+//                }
+//            } else if (!loggedInEmployee.getAdmin()) {
+//
+//                System.out.println("Press 1 to create a ticket, 2 view all your tickets ");
+//                ticketChoice = sc.nextLine();
 
-                System.out.println("Press 1 to update a ticket, 2 view all tickets pending, 3 view all tickets ");
-
-                ticketChoice = sc.nextLine();
-
-                if (ticketChoice.equals("1")) {
-                    System.out.println("updated ticket");
-                    rs.updateReimbursement();
-                } else if(ticketChoice.equals("2")){
-                    rs.getAllPending();
-                }else if (ticketChoice.equals("3")) {
-                    rs.getAllReimbursement();
-                } else {
-                    System.out.println("invalid input");
-                }
-            } else if (!loggedInEmployee.getAdmin()) {
-
-                System.out.println("Press 1 to create a ticket, 2 view all your tickets ");
-                ticketChoice = sc.nextLine();
-
-                if (ticketChoice.equals("1")) {
-                    rs.createReimbursement(loggedInEmployee);
-                } else if (ticketChoice.equals("2")){
-                    rs.getReimbursementByEmployee(loggedInEmployee);
-                } else {
-                    System.out.println("invalid input");
-                }
-            }
-        }
+//                if (ticketChoice.equals("1")) {
+//                    rs.createReimbursement(loggedInEmployee);
+//                } else if (ticketChoice.equals("2")){
+//                    rs.getReimbursementByEmployee(loggedInEmployee);
+//                } else {
+//                    System.out.println("invalid input");
+//                }
+//            }
+//        }
     }
 }
 

@@ -14,23 +14,27 @@ public class ReimbursementService {
 
     ReimbursementDAO rd = new ReimbursementDAOImpl();
 
-    public void createReimbursement(Employee employee){
+//    public void createReimbursement(Employee employee){
+//
+//        System.out.println("Enter amount for reimbursement");
+//        double amount = Double.parseDouble(sc.nextLine());
+//
+//        System.out.println("Enter reimbursement description");
+//        String description = sc.nextLine();
+//
+//        boolean successful = rd.createReimbursement(amount, description, reimbursementType, employee);
+//
+//        if(successful){
+//            System.out.println("You created a reimbursement ticket!");
+//        }else{
+//            System.out.println("Something went wrong can not create ticket!");
+//        }
+//    }
 
-        System.out.println("Enter amount for reimbursement");
-        double amount = Double.parseDouble(sc.nextLine());
-
-        System.out.println("Enter reimbursement description");
-        String description = sc.nextLine();
-
-        boolean successful = rd.createReimbursement(amount, description, employee);
-
-        if(successful){
-            System.out.println("You created a reimbursement ticket!");
-        }else{
-            System.out.println("Something went wrong can not create ticket!");
-        }
+    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee){
+        Reimbursement ticket = rd.createReimbursement(amount, description, reimbursementType, employee);
+        return ticket;
     }
-
     public void getAllReimbursement(){
         System.out.println("List of created Tickets: ");
 
