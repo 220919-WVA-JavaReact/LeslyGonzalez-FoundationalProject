@@ -41,11 +41,24 @@ public class ReimbursementServlet extends HttpServlet {
         //Call the database to get the reimbursement ticket list
         if (session != null) {
             Employee loggedIn = (Employee) session.getAttribute("auth-user");
-            List<Reimbursement> tickets = rd.getAllPending();
 
-            String resPayload = objMapper.writeValueAsString(tickets);
-            resp.setContentType("application/json");
-            resp.getWriter().write(resPayload);
+            if(req.getParameter("action").equals("pending")){//if pending then get pending tickets
+
+
+                List<Reimbursement> tickets = rd.getAllPending();
+
+                String resPayload = objMapper.writeValueAsString(tickets);
+                resp.setContentType("application/json");
+                resp.getWriter().write(resPayload);
+
+            }else if(req.getParameter("action").equals("byEmployee")){//tickets by employee sign in
+                List<Reimbursement> tickets = rd.getReimbursementByEmployee(loggedIn.getEmployeeId());
+
+                String resPayload = objMapper.writeValueAsString(tickets);
+                resp.setContentType("application/json");
+                resp.getWriter().write(resPayload);
+            }
+
         }else{
             resp.setStatus(400);
             resp.setContentType("application/json");

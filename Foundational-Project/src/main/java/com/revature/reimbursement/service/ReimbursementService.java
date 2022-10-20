@@ -72,6 +72,10 @@ public class ReimbursementService {
         }
     }
 
+    public Reimbursement getReimbursementByEmployee(int employee_id){
+        return (Reimbursement) rd.getReimbursementByEmployee(employee_id);
+    }
+
     public void updateReimbursement(){
 
         Reimbursement reimbursement;
