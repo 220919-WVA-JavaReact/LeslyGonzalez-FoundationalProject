@@ -11,7 +11,7 @@ import java.util.List;
 public class ReimbursementDAOImpl implements ReimbursementDAO {
 
     @Override
-    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee) {
+    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, int employee) {
         System.out.println("Created ticked Method");
 
 
@@ -20,27 +20,38 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
         try (Connection conn = ConnectionUtil.getConnection()) {
 
 
-            String sql = "INSERT INTO reimbursement (amount, description, reimbursement_type, employee_id) VALUES (?,?,?)";
+            String sql = "INSERT INTO reimbursement (amount, description, reimbursement_type, employee_id) VALUES (?,?,?,?) RETURNING *";
 
             PreparedStatement stat = conn.prepareStatement(sql);
 
             stat.setDouble(1, amount);
             stat.setString(2, description);
-            stat.setString(3, reimbursementType );
-            stat.setInt(4, employee.getEmployeeId());
-// ResultSet rs;
-//
-//            if((rs = stat.executeQuery()) != null){
-            int rowsUpdated = stat.executeUpdate();
+            stat.setString(3, reimbursementType);
+            stat.setInt(4, employee);
 
-            if (rowsUpdated == 1) {
-                return reimbursement;
-            }
+
+            ResultSet rs;
+
+            if((rs = stat.executeQuery()) != null) {
+                if(rs.next()){
+                    int id = rs.getInt("reimbursement_id");
+                    double newAmount = rs.getDouble("amount");
+                    String newDescription = rs.getString("description");
+                    String type = rs.getString("reimbursement_type");
+                    boolean approval_status = rs.getBoolean("approval_status");
+                    boolean completed = rs.getBoolean("completed");
+                    String date = rs.getString("created_at");
+                    int employee_id = rs.getInt("employee_id");
+
+                    reimbursement = new Reimbursement(id, newAmount, newDescription, type , approval_status, completed, date, employee_id);
+
+                }
+        }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Unable to add course");
+            System.out.println("Unable to add ticket");
         }
-        return null;
+        return reimbursement;
     }
 
 

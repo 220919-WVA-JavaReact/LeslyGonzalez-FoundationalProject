@@ -10,7 +10,7 @@ public interface ReimbursementDAO {
     //Create
 
 
-    Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee);
+    Reimbursement createReimbursement(double amount, String description, String reimbursementType, int employee);
 
     //Read
     List<Reimbursement> getAllReimbursement();

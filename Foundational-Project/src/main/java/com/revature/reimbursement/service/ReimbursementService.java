@@ -31,7 +31,7 @@ public class ReimbursementService {
 //        }
 //    }
 
-    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, Employee employee){
+    public Reimbursement createReimbursement(double amount, String description, String reimbursementType, int employee){
         Reimbursement ticket = rd.createReimbursement(amount, description, reimbursementType, employee);
         return ticket;
     }

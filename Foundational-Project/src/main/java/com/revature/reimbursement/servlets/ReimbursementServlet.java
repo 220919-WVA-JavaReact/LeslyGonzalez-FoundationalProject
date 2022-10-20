@@ -50,31 +50,31 @@ public class ReimbursementServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         HttpSession session = req.getSession(false);
 
+        if (session != null) {
+            Employee loggedIn = (Employee) session.getAttribute("auth-user");
+
+            HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
+
+            double providedAmount = (double) credentials.get("amount");
+            String providedDescription = (String) credentials.get("description");
+            String providedType = (String) credentials.get("reimbursement_type");
 
 
+            Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, loggedIn.getEmployeeId());
 
-        HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
+            String payload = objMapper.writeValueAsString(ticket);
 
-        double providedAmount = (double) credentials.get("amount");
-        String providedDescription = (String) credentials.get("description");
-        String providedType = (String) credentials.get("description_type");
+            if (!payload.equals("null")) {
+                resp.setContentType("application/json");
+                resp.getWriter().write(payload);
+            } else {
+                resp.getWriter().write("no bueno");
 
-        Object employeeId = credentials.get("employee_id");//once sessions then delete
-        Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, (Employee) employeeId);//loddeinemployee.id
-
-        String payload = objMapper.writeValueAsString(ticket);
-
-        if(!payload.equals("null")){
-            resp.setContentType("application/json");
-            resp.getWriter().write(payload);
-        }else {
-            resp.getWriter().write("no bueno");
+            }
 
         }
-
     }
 
 }
