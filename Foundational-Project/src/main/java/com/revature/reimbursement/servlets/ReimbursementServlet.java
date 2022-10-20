@@ -44,15 +44,25 @@ public class ReimbursementServlet extends HttpServlet {
 
             if(req.getParameter("action").equals("pending")){//if pending then get pending tickets
 
+                if(loggedIn.getAdmin()) {
+                    List<Reimbursement> tickets = rd.getAllPending();
 
-                List<Reimbursement> tickets = rd.getAllPending();
+                    String resPayload = objMapper.writeValueAsString(tickets);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write(resPayload);
+                }else{
+                    resp.setStatus(400);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("Message: Login as manager to proceed.");
+                }
+            }else if(req.getParameter("action").equals("byEmployee")){//tickets by employee sign in
+                List<Reimbursement> tickets = rd.getReimbursementByEmployee(loggedIn.getEmployeeId());
 
                 String resPayload = objMapper.writeValueAsString(tickets);
                 resp.setContentType("application/json");
                 resp.getWriter().write(resPayload);
-
-            }else if(req.getParameter("action").equals("byEmployee")){//tickets by employee sign in
-                List<Reimbursement> tickets = rd.getReimbursementByEmployee(loggedIn.getEmployeeId());
+            } else if (req.getParameter("action").equals("allTickets")) {
+                List<Reimbursement> tickets = rd.getAllReimbursement();//All tickets
 
                 String resPayload = objMapper.writeValueAsString(tickets);
                 resp.setContentType("application/json");
@@ -62,11 +72,7 @@ public class ReimbursementServlet extends HttpServlet {
         }else{
             resp.setStatus(400);
             resp.setContentType("application/json");
-
-            HashMap<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("Status code", 400);
-            errorMessage.put("Message" , "Please login to access this information");
-            errorMessage.put("TimeStamp" , LocalDateTime.now().toString());
+            resp.getWriter().write("Message:  Login to view this features.");
         }
     }
 
@@ -101,13 +107,13 @@ public class ReimbursementServlet extends HttpServlet {
                     } else {
                         resp.setStatus(400);
                         resp.setContentType("application/json");
-
-                        HashMap<String, Object> errorMessage = new HashMap<>();
-                        errorMessage.put("Status code", 400);
-                        errorMessage.put("Message", "Unable to create reimbursement ticket");
-                        errorMessage.put("TimeStamp", LocalDateTime.now().toString());
+                        resp.getWriter().write("Unable to create reimbursement ticket.");
                     }
                 }
+        }else{
+            resp.setStatus(400);
+            resp.setContentType("application/json");
+            resp.getWriter().write("Message: Login to view this features");
         }
     }
 
@@ -140,10 +146,7 @@ public class ReimbursementServlet extends HttpServlet {
                     }else {
                         resp.setStatus(400);
                         resp.setContentType("application/json");
-                        HashMap<String, Object> errorMessage = new HashMap<>();
-                        errorMessage.put("Status code", 400);
-                        errorMessage.put("Message", "Unable to update reimbursement ticket status");
-                        errorMessage.put("TimeStamp", LocalDateTime.now().toString());
+                        resp.getWriter().write("Unable to update ticket reimbursement status.");
                         }
                     } else if (req.getParameter("action").equals("approvedTicket")) {
 
@@ -162,19 +165,20 @@ public class ReimbursementServlet extends HttpServlet {
                             resp.getWriter().write(payload);
 
                         }else{
-                            HashMap<String, Object> errorMessage = new HashMap<>();
-                            errorMessage.put("Status code", 400);
-                            errorMessage.put("Message", "Unable to update reimbursement ticket status");
-                            errorMessage.put("TimeStamp", LocalDateTime.now().toString());
+                            resp.setStatus(400);
+                            resp.setContentType("application/json");
+                            resp.getWriter().write("Unable to update ticket reimbursement status.");
                         }
                     }
+            }else { //check this section
+                resp.setStatus(400);
+                resp.setContentType("application/json");
+                resp.getWriter().write("Message: Login as manager to proceed");
             }
-
-        } else if (session == null) { //check this section
-            HashMap<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("Status code", 400);
-            errorMessage.put("Message", "Login as manager to proceed");
-            errorMessage.put("TimeStamp", LocalDateTime.now().toString());
+        } else { //check this section
+            resp.setStatus(400);
+            resp.setContentType("application/json");
+            resp.getWriter().write("Message: Login to view features");
         }
 
     }

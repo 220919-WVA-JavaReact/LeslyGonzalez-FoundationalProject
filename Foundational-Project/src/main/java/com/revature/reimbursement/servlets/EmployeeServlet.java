@@ -33,16 +33,29 @@ public class EmployeeServlet extends HttpServlet {
         System.out.println("[LOG}  - EmployeeServlet Instantiated!");
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)throws ServletException, IOException{
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
 
+        HttpSession session = req.getSession(false);
         //Call the database to get the reimbursement ticket list
+        if (session != null) {
+            Employee loggedIn = (Employee) session.getAttribute("auth-user");
 
-        List<Employee> tickets = ed.getAllEmployees();
+            if(loggedIn.getAdmin()) {
+                List<Employee> tickets = ed.getAllEmployees();
 
-        String resPayload = objMapper.writeValueAsString(tickets);
-        res.setContentType("application/json");
-        res.getWriter().write(resPayload);
-
+                String resPayload = objMapper.writeValueAsString(tickets);
+                resp.setContentType("application/json");
+                resp.getWriter().write(resPayload);
+            }else{
+                resp.setStatus(400);
+                resp.setContentType("application/json");
+                resp.getWriter().write("Message: Login as a manager to view this features.");
+            }
+        }else {
+            resp.setStatus(400);
+            resp.setContentType("application/json");
+            resp.getWriter().write("Message: Login to view this features.");
+        }
     }
 
 
@@ -64,7 +77,9 @@ public class EmployeeServlet extends HttpServlet {
                 resp.setContentType("application/json");
                 resp.getWriter().write(payload);
             } else {
-                resp.getWriter().write("no good");
+                resp.setStatus(400);
+                resp.setContentType("application/json");
+                resp.getWriter().write("Message: Unable to create a new user.");
             }
         }
     }
