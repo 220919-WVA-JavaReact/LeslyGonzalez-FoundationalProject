@@ -86,7 +86,12 @@ Scanner sc = new Scanner(System.in);
 
     public Employee register(String first, String last, String username, String password){
         Employee employee = ed.createEmployee(first, last, username, password);
-        return employee;
+        if(employee.getEmployeeId() != 0){
+            return employee;
+        }else{
+            return null;
+        }
+
     }
 
     public void getAllEmployees(){

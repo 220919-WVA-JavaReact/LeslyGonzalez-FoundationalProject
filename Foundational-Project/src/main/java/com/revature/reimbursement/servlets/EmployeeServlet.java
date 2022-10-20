@@ -79,7 +79,7 @@ public class EmployeeServlet extends HttpServlet {
             } else {
                 resp.setStatus(400);
                 resp.setContentType("application/json");
-                resp.getWriter().write("Message: Unable to create a new user.");
+                resp.getWriter().write("Message: Username already in use.");
             }
         }
     }

@@ -83,38 +83,44 @@ public class ReimbursementServlet extends HttpServlet {
 
         if (session != null) {
             Employee loggedIn = (Employee) session.getAttribute("auth-user");
+                if(loggedIn.getAdmin()) {
+                    HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
 
-                HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
+                    double providedAmount = (double) credentials.get("amount");
+                    String providedDescription = (String) credentials.get("description");
+                    String providedType = (String) credentials.get("reimbursement_type");
 
-                double providedAmount = (double) credentials.get("amount");
-                String providedDescription = (String) credentials.get("description");
-                String providedType = (String) credentials.get("reimbursement_type");
-
-                if (providedAmount <= 0.00) {
-                    resp.getWriter().write("Message: Reimbursement ticket amount can not be equal to zero! \n        Please enter a valid amount.");
-                } else if (providedDescription.equals("")) {
-                    resp.getWriter().write("Message: Reimbursement ticket description can not be empty! \n        Please enter a valid description.");
-                } else if (providedType.equals("")) {
-                    resp.getWriter().write("Message: Reimbursement ticket reimbursement type can not be empty! \n        Please enter a valid type.");
-                } else {
-                    Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, loggedIn.getEmployeeId());
-
-                    String payload = objMapper.writeValueAsString(ticket);
-
-                    if (!payload.equals("null")) {
-                        resp.setContentType("application/json");
-                        resp.getWriter().write(payload);
+                    if (providedAmount <= 0.00) {
+                        resp.getWriter().write("Message: Reimbursement ticket amount can not be equal to zero! \n        Please enter a valid amount.");
+                    } else if (providedDescription.equals("")) {
+                        resp.getWriter().write("Message: Reimbursement ticket description can not be empty! \n        Please enter a valid description.");
+                    } else if (providedType.equals("")) {
+                        resp.getWriter().write("Message: Reimbursement ticket reimbursement type can not be empty! \n        Please enter a valid type.");
                     } else {
-                        resp.setStatus(400);
-                        resp.setContentType("application/json");
-                        resp.getWriter().write("Unable to create reimbursement ticket.");
+                        Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, loggedIn.getEmployeeId());
+
+                        String payload = objMapper.writeValueAsString(ticket);
+
+                        if (!payload.equals("null")) {
+                            resp.setContentType("application/json");
+                            resp.getWriter().write(payload);
+                        } else {
+                            resp.setStatus(400);
+                            resp.setContentType("application/json");
+                            resp.getWriter().write("Unable to create reimbursement ticket.");
+                        }
                     }
+                }else {
+                    resp.setStatus(400);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("Message: Login as a manager to view this feature");
                 }
-        }else{
+        }else {
             resp.setStatus(400);
             resp.setContentType("application/json");
             resp.getWriter().write("Message: Login to view this features");
         }
+
     }
 
     @Override

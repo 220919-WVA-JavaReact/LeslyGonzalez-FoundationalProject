@@ -67,20 +67,20 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
 
             ResultSet rs;
 
-            if((rs = stat.executeQuery()) != null){
+            if((rs = stat.executeQuery()) != null) {
 
-                rs.next();
+                if (rs.next()) {
 
-                int id = rs.getInt("employee_id");
-                String receivedFirst = rs.getString("first");
-                String receivedLast = rs.getString("last");
-                String receivedUser = rs.getString("username");
-                String receivedPassword = rs.getString("password");
-                boolean receivedAdmin = rs.getBoolean("admin");
+                    int id = rs.getInt("employee_id");
+                    String receivedFirst = rs.getString("first");
+                    String receivedLast = rs.getString("last");
+                    String receivedUser = rs.getString("username");
+                    String receivedPassword = rs.getString("password");
+                    boolean receivedAdmin = rs.getBoolean("admin");
 
-                employee = new Employee(id, receivedFirst, receivedLast, receivedUser, receivedPassword, receivedAdmin);
+                    employee = new Employee(id, receivedFirst, receivedLast, receivedUser, receivedPassword, receivedAdmin);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Username in use. Enter another username");
