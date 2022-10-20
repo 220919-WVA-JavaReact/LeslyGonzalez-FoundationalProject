@@ -37,7 +37,7 @@ Scanner sc = new Scanner(System.in);
     }
 
     public Employee login(String username, String password) throws NullPointerException{
-         Employee user = ed.getByUsername(username);
+        Employee user = ed.getByUsername(username);
         if (password.equals(user.getPassword())){
             return user;
         }

@@ -48,34 +48,25 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
 
-        if(session != null){
-            Employee loggedIn = (Employee) session.getAttribute("auth-user");
-        }
-        HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
+            HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
 
-        String providedFirst = (String) credentials.get("first");
-        String providedLast = (String) credentials.get("last");
-        String providedUser = (String) credentials.get("username");
-        String providedPass= (String) credentials.get("password");
+            String providedFirst = (String) credentials.get("first");
+            String providedLast = (String) credentials.get("last");
+            String providedUser = (String) credentials.get("username");
+            String providedPass = (String) credentials.get("password");
 
-        Employee user = es.register(providedFirst, providedLast, providedUser, providedPass);
-        String payload = objMapper.writeValueAsString(user);
+            Employee user = es.register(providedFirst, providedLast, providedUser, providedPass);
+            String payload = objMapper.writeValueAsString(user);
 
 
-        if(!payload.equals("null")) {
-            resp.setContentType("application/json");
-            resp.getWriter().write(payload);
-        } else if(providedFirst.equals("null") && providedFirst.equals("")){
-            resp.getWriter().write("First name can't be empty. Please enter a first name.");
-        }else if(providedLast.equals("null") && providedLast.equals("")){
-            resp.getWriter().write(("Last name can't be empty. Please enter last name."));
-        } else if (providedUser.equals("null") && providedUser.equals("")){
-            resp.getWriter().write("Username can't be empty. Please enter username");
-        } else if (!providedPass.equals("null") || !providedPass.equals("")){
-            resp.getWriter().write("Password cant be empty. Please enter a password");
+            if (!payload.equals("null")) {
+                resp.setContentType("application/json");
+                resp.getWriter().write(payload);
+            } else {
+                resp.getWriter().write("no good");
+            }
         }
     }
-}
+
 
