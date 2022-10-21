@@ -24,6 +24,11 @@ public class Employee {
         this.password = password;
     }
 
+    public Employee(boolean admin, int employeeId) {
+        this.admin = admin;
+        this.employeeId = employeeId;
+    }
+
     public Employee() {
 
     }

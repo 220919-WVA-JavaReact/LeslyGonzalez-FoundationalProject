@@ -97,6 +97,10 @@ public class ReimbursementService {
     public Reimbursement reimbursementApproval(int id){
         return rd.reimbursementApproval(id);
     }
+
+    public Reimbursement getReimbursementById(int providedTicket) {
+        return rd.getReimbursementById(providedTicket);
+    }
 }
 
 

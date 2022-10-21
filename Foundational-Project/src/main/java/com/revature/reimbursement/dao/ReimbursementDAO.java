@@ -27,5 +27,7 @@ public interface ReimbursementDAO {
     Reimbursement updateReimbursementDeny(int id);
 
     Reimbursement reimbursementApproval(int id);
+
+    Reimbursement getReimbursementById(int providedTicket);
 }
 

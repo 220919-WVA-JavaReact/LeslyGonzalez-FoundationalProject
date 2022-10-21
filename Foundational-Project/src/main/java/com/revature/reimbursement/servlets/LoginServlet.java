@@ -68,15 +68,16 @@ public class LoginServlet extends HttpServlet {
     }
 
 @Override
-    protected  void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 
         HttpSession session = req.getSession(false);
 
         if(session != null){
             session.invalidate();
+            resp.getWriter().write("Logged out");
+        }else{
+            resp.setStatus(201);
         }
-        resp.setStatus(204);
-    resp.getWriter().write(objMapper.writeValueAsString("Logged out"));
     }
 
 }

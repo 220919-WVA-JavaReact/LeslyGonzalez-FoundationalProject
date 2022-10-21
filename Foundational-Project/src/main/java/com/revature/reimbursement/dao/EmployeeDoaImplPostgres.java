@@ -1,6 +1,7 @@
 package com.revature.reimbursement.dao;
 
 import com.revature.reimbursement.models.Employee;
+import com.revature.reimbursement.models.Reimbursement;
 import com.revature.reimbursement.util.ConnectionUtil;
 
 import java.sql.*;
@@ -122,7 +123,40 @@ public class EmployeeDoaImplPostgres implements EmployeeDAO {
         return employee;
     }
 
+    @Override
+    public Employee updateManager(boolean admin, int id){
+        Employee user= new Employee();
 
+        try (Connection conn = ConnectionUtil.getConnection()) {
+
+            String sql = "UPDATE employee SET \"admin\" = ? WHERE employee_id = ? RETURNING *";
+
+            PreparedStatement stat = conn.prepareStatement(sql);
+
+            stat.setBoolean(1, admin);
+            stat.setInt(2, id);
+
+            ResultSet rs;
+
+            if ((rs = stat.executeQuery()) != null) {
+
+                rs.next();
+                int employee_id = rs.getInt("employee_id");
+                String first = rs.getString("first");
+                String last = rs.getString("last");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                boolean manager = rs.getBoolean("admin");
+
+                user = new Employee(employee_id, first, last, username,password, manager);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        System.out.println(user);
+        return user;
+    }
 
 
 }

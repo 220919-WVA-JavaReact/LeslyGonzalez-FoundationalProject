@@ -242,6 +242,43 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
         return ticket;
     }
 
+    @Override
+    public Reimbursement getReimbursementById(int providedTicket) {
+        Reimbursement reimbursement = new Reimbursement();
+
+        try (Connection conn = ConnectionUtil.getConnection();) {
+
+            String sql = "SELECT * FROM reimbursement WHERE reimbursement_id = ?";
+
+            PreparedStatement stat = conn.prepareStatement(sql);
+
+            stat.setInt(1, providedTicket);
+
+            ResultSet rs;
+
+            if ((rs = stat.executeQuery()) != null) {
+
+                if (rs.next()) {
+
+                    int ticketId = rs.getInt("reimbursement_id");
+                    double amount = rs.getDouble("amount");
+                    String description = rs.getString("description");
+                    String type = rs.getString("reimbursement_type");
+                    boolean approved = rs.getBoolean("approval_status");
+                    boolean completed = rs.getBoolean("completed");
+                    String date = rs.getString("created_at");
+                    int employeeId = rs.getInt("employee_id");
+
+                    reimbursement = new Reimbursement(ticketId, amount, description, type, approved, completed, date, employeeId);
+
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reimbursement;
+    }
 
 
 }

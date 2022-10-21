@@ -82,6 +82,43 @@ public class EmployeeServlet extends HttpServlet {
                 resp.getWriter().write("Message: Username already in use.");
             }
         }
+
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            Employee loggedIn = (Employee) session.getAttribute("auth-user");
+
+            if (loggedIn.getAdmin()) {
+                    HashMap<String, Object> updateDeny = objMapper.readValue(req.getInputStream(), HashMap.class);
+
+                    boolean approvedAdmin = (boolean) updateDeny.get("admin");
+                    int providedUser = (int) updateDeny.get("employee_id");
+
+
+                    Employee user = es.updateManager(approvedAdmin, providedUser);
+
+                    String payload = objMapper.writeValueAsString(user);
+
+                    if (payload != null) {
+                        resp.setStatus(200);
+                        resp.setContentType("application/json");
+                        resp.getWriter().write("Message: Your role was updated. \n ");
+                        resp.getWriter().write(payload);
+
+                    } else {
+                        resp.setStatus(400);
+                        resp.setContentType("application/json");
+                        resp.getWriter().write("Unable to update column");
+                    }
+            }else{
+                resp.setStatus(400);
+                resp.setContentType("application/json");
+                resp.getWriter().write("Login as a manager to update or downgrade a role");
+            }
+        }
     }
+}
+
 
 

@@ -13,4 +13,6 @@ public interface EmployeeDAO {
 
     //adding method
     List<Employee> getAllEmployees();
+
+    Employee updateManager(boolean admin, int id);
 }

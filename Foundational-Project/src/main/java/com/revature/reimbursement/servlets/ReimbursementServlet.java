@@ -62,13 +62,16 @@ public class ReimbursementServlet extends HttpServlet {
                 resp.setContentType("application/json");
                 resp.getWriter().write(resPayload);
             } else if (req.getParameter("action").equals("allTickets")) {
-                List<Reimbursement> tickets = rd.getAllReimbursement();//All tickets
+                if(loggedIn.getAdmin()) {
+                    List<Reimbursement> tickets = rd.getAllReimbursement();//All tickets
 
-                String resPayload = objMapper.writeValueAsString(tickets);
-                resp.setContentType("application/json");
-                resp.getWriter().write(resPayload);
+                    String resPayload = objMapper.writeValueAsString(tickets);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write(resPayload);
+                }else{
+                    resp.getWriter().write("Manager feature! Can not be accessed by Employees.");
+                }
             }
-
         }else{
             resp.setStatus(400);
             resp.setContentType("application/json");
@@ -83,38 +86,34 @@ public class ReimbursementServlet extends HttpServlet {
 
         if (session != null) {
             Employee loggedIn = (Employee) session.getAttribute("auth-user");
-                if(loggedIn.getAdmin()) {
-                    HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
 
-                    double providedAmount = (double) credentials.get("amount");
-                    String providedDescription = (String) credentials.get("description");
-                    String providedType = (String) credentials.get("reimbursement_type");
+            HashMap<String, Object> credentials = objMapper.readValue(req.getInputStream(), HashMap.class);
 
-                    if (providedAmount <= 0.00) {
-                        resp.getWriter().write("Message: Reimbursement ticket amount can not be equal to zero! \n        Please enter a valid amount.");
-                    } else if (providedDescription.equals("")) {
-                        resp.getWriter().write("Message: Reimbursement ticket description can not be empty! \n        Please enter a valid description.");
-                    } else if (providedType.equals("")) {
-                        resp.getWriter().write("Message: Reimbursement ticket reimbursement type can not be empty! \n        Please enter a valid type.");
-                    } else {
-                        Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, loggedIn.getEmployeeId());
+            double providedAmount = (double) credentials.get("amount");
+            String providedDescription = (String) credentials.get("description");
+            String providedType = (String) credentials.get("reimbursement_type");
 
-                        String payload = objMapper.writeValueAsString(ticket);
+            if (providedAmount <= 0.00) {
+                resp.getWriter().write("Message: Reimbursement ticket amount can not be equal to zero! \n        Please enter a valid amount.");
+            } else if (providedDescription.equals("")) {
+                resp.getWriter().write("Message: Reimbursement ticket description can not be empty! \n        Please enter a valid description.");
+            } else if (providedType.equals("")) {
+                resp.getWriter().write("Message: Reimbursement ticket reimbursement type can not be empty! \n        Please enter a valid type.");
+            } else {
+                Reimbursement ticket = rs.createReimbursement(providedAmount, providedDescription, providedType, loggedIn.getEmployeeId());
 
-                        if (!payload.equals("null")) {
-                            resp.setContentType("application/json");
-                            resp.getWriter().write(payload);
-                        } else {
-                            resp.setStatus(400);
-                            resp.setContentType("application/json");
-                            resp.getWriter().write("Unable to create reimbursement ticket.");
-                        }
-                    }
-                }else {
+                String payload = objMapper.writeValueAsString(ticket);
+
+                if (!payload.equals("null")) {
+                    resp.setContentType("application/json");
+                    resp.getWriter().write(payload);
+                } else {
                     resp.setStatus(400);
                     resp.setContentType("application/json");
-                    resp.getWriter().write("Message: Login as a manager to view this feature");
+                    resp.getWriter().write("Unable to create reimbursement ticket.");
                 }
+            }
+
         }else {
             resp.setStatus(400);
             resp.setContentType("application/json");
@@ -139,43 +138,58 @@ public class ReimbursementServlet extends HttpServlet {
                     int ProvidedTicket = (int) updateDeny.get("reimbursement_id");
                     System.out.println(ProvidedTicket);
 
-                    Reimbursement ticket = rs.updateReimbursementDeny(ProvidedTicket);
+                    Reimbursement getTicket = rs.getReimbursementById(ProvidedTicket);
 
-                    String payload = objMapper.writeValueAsString(ticket);
+                    if (!getTicket.isApprovalStatus() && !getTicket.isCompleted()) {
 
-                    if (!payload.equals("null")) {
-                        resp.setStatus(200);
-                        resp.setContentType("application/json");
-                        resp.getWriter().write("Message: Your ticket was Denied. \n         Might not be a work related cause. \n");
-                        resp.getWriter().write(payload);
+                        Reimbursement ticket = rs.updateReimbursementDeny(ProvidedTicket);
 
-                    }else {
-                        resp.setStatus(400);
-                        resp.setContentType("application/json");
-                        resp.getWriter().write("Unable to update ticket reimbursement status.");
+                        String payload = objMapper.writeValueAsString(ticket);
+
+                        if (payload != null) {
+                            resp.setStatus(200);
+                            resp.setContentType("application/json");
+                            resp.getWriter().write("Message: Your ticket was Denied. \n         Might not be a work related cause. \n");
+                            resp.getWriter().write(payload);
+
+                        } else {
+                            resp.setStatus(400);
+                            resp.setContentType("application/json");
+                            resp.getWriter().write("Unable to update ticket reimbursement status.");
                         }
-                    } else if (req.getParameter("action").equals("approvedTicket")) {
+                    }else{
+                        resp.getWriter().write("You can not approve tickets that have already been approved or denied.");
+                    }
+
+                } else if (req.getParameter("action").equals("approvedTicket")) {
 
                     HashMap<String, Object> approvedTicket = objMapper.readValue(req.getInputStream(), HashMap.class);
 
                     int providedTicket = (int) approvedTicket.get("reimbursement_id");
 
-                    Reimbursement ticket = rs.reimbursementApproval(providedTicket);
+                    Reimbursement getTicket = rs.getReimbursementById(providedTicket);
 
-                    String payload = objMapper.writeValueAsString(ticket);
+                    if (!getTicket.isApprovalStatus() && !getTicket.isCompleted()) {
 
-                        if(!payload.equals("null")) {
+                        Reimbursement ticket = rs.reimbursementApproval(providedTicket);
+
+                        String payload = objMapper.writeValueAsString(ticket);
+
+                        if (payload != null) {
                             resp.setStatus(200);
                             resp.setContentType("application/json");
                             resp.getWriter().write("Message: Your ticket was Approved. \n         Enough proof of work related cause. \n");
                             resp.getWriter().write(payload);
 
-                        }else{
+                        } else {
                             resp.setStatus(400);
                             resp.setContentType("application/json");
                             resp.getWriter().write("Unable to update ticket reimbursement status.");
                         }
+                    }else{
+                        resp.getWriter().write("You can not approve tickets that have already been approved or denied.");
                     }
+                }
             }else { //check this section
                 resp.setStatus(400);
                 resp.setContentType("application/json");

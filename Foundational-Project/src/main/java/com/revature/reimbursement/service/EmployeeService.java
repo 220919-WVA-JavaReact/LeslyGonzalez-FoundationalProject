@@ -94,6 +94,10 @@ Scanner sc = new Scanner(System.in);
 
     }
 
+    public Employee updateManager(boolean admin, int id){
+        return ed.updateManager(admin, id);
+    }
+
     public void getAllEmployees(){
         System.out.println("Using the database to return all of our employee objects");
 
